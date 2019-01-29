@@ -1,0 +1,36 @@
+{% extends 'master/base.html' %}
+{% load widget_tweaks %}
+{% block body %}
+  {% for f in form %}
+
+  <div class="row" style="background:#B2E4C7; margin-top:-20px; padding-top:10px;">
+    <div class="container">
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-6">
+        {% if f.image %}
+					<img src='{{f.image.url}}' alt="Photo of event" height=250px; width=400px;>
+				{% endif %}
+        <br><br><br><br>
+        <b><h3>Title:&nbsp;&nbsp{{f.event_title}}</h3></b><br><hr>
+        <h4>Location:&nbsp;&nbsp{{f.Location}}</h4><br><hr>
+        <h4>Start Date:&nbsp;&nbsp{{f.start_date}} &nbsp;&nbsp;&nbsp;&nbsp; Start Time:&nbsp;&nbsp;{{f.start_time}}</h4><br>
+        <h4>End  Date:&nbsp;&nbsp{{f.end_date}} &nbsp;&nbsp;&nbsp;&nbsp; Start Time:&nbsp;&nbsp;{{f.end_time}}</h4><br><br><hr>
+        <h4><u>About This Event</u></h4><br>
+          <h5><p>{{f.description}}</p></h5>
+
+      </div>
+      <div class="col-md-4">
+        <br><br><br><br>
+        <h4>Organizer: {{f.organizer}}</h4>
+        <br><br>
+        <h4>Category:{{f.category}}</h4>
+        <br><br>
+        <h4>Type:{{f.type}}</h4><br><br>
+        <h3><a href="{% url 'get_token' f.id %}"><button type="button" name="button" class="btn btn-success">GET TOKEN</button></a></h3>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+{%endblock%}

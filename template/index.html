@@ -1,0 +1,35 @@
+{% extends 'master/base.html' %}
+{% load widget_tweaks %}
+{% block body %}
+<div class="" style="margin-top:-40px;">
+		{% include 'partials/slider.html' %}
+</div>
+<br>
+<div class="" style="background:#7FF5DC; margin:-13px;">
+	<h3 class="text-center " style="font-style:Verdana;"><b><u>EVENTS LISTS</u></b></h3>
+<br><br>
+	<div class="row">
+		<div class="container" style="font-size:15px;padding:10px;">
+			{% for f in form %}
+			<a href="{% url 'event_detail' f.id %}">
+			<div class='col-md-4' class="" style="padding:15px;"">
+				{% if f.image %}
+					<img src='{{f.image.url}}' alt="Photo of event" height=200px; width=250px;>
+				{% endif %}
+				<th>{{f.event_title}}</th><br>
+				<th>{{f.organizer}}</th><br>
+				<th>{{f.type}}</th><br>
+				<th>{{f.start_date}}({{f.start_time}}-{{f.end_time}})</th><br>
+			</div></a>
+
+			{% endfor %}<br><br>
+
+		</div>
+	</div>
+
+</div>
+
+<div class="div">
+</div>
+<br><br><br><br>
+{%endblock%}

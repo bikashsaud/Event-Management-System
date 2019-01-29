@@ -1,0 +1,26 @@
+{% extends 'master/base.html' %}
+{% load widget_tweaks %}
+			{% block body %}
+      <div class="row align-items-center"><br>
+
+                <br>
+      <div class="container thumbnail col-md-7 content-center">
+        <h2 style='text-align:center;'>Register Account</h2><br>
+        <br><br>
+        <form method="post">
+
+          {% csrf_token %}
+            {% for field in form %}
+            {{field.label_tag}}
+            <div class="input-group">
+              {{field|add_class:'form-control'}}
+            </div>
+            {% endfor %}
+<br>
+<button type="submit">Register</button>
+
+
+        </form>
+      </div>
+    </div>
+        {% endblock%}
