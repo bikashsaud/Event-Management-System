@@ -166,8 +166,22 @@ CKEDITOR_UPLOAD_PATH = "/media/"
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.mail.yahoo.com'
 EMAIL_HOST_USER='saudbikash514@yahoo.com'#senders email address
 EMAIL_HOST_PASSWORD='sauddevelopmentS514'
 EMAIL_PORT=587
 EMAIL_USE_TLS=False
+
+#
+# DEFAULT_FROM_EMAIL = 'noreply@khophi.co'
+#
+# SERVER_MAIL = 'noreply@khophi.co'
+
+
+# Example for using Zoho Mail as email sending backend
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.zoho.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'noreply@khophi.co'
+# EMAIL_HOST_PASSWORD = 'mypassword'

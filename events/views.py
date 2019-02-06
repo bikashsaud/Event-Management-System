@@ -110,7 +110,7 @@ def delete_event(request,id):
             return redirect('index')
     else:
         return redirect('login')
-        
+
 #cancle event br who register Event
 def cancle_event(request,id):
     if request.user.is_authenticated():
@@ -122,3 +122,22 @@ def cancle_event(request,id):
             return redirect('index')
     else:
         return redirect('login')
+
+
+def contact(request):
+    """Send Contact Email"""
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            send_mail_from = 'noreply@khophi.co'
+            # this sender refers to person who the email is from
+            # as indicated in the contact form
+            recipients = ['contact@khophi.co', form.cleaned_data['sender']]
+
+            send_mail(subject, message, sender, recipients)
+            return HttpResponseRedirect('/help/contact?sent=yes')  # Redirect after POST
+    else:
+        form = ContactForm()  # An unbound form
+    return render(request, 'contact.html', {'form': form, 'sent': request.GET.get('sent', '') })

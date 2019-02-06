@@ -17,8 +17,8 @@
         {% if field.image %}
         {{field.image}}
         {%endif%}
+        {% autoescape off %}{{field.description | truncatewords:50}} {% endautoescape%}
       </div>
-
       {% endfor %}
 
       <input type="submit" name="" value="Create...It">
