@@ -5,7 +5,7 @@ from django.utils.timezone import datetime
 from django.utils import timezone
 from datetime import date
 # Create your models here.
-
+from django.core.urlresolvers import reverse
 
 class Create_Event(models.Model):
     Education='Education'
@@ -18,7 +18,7 @@ class Create_Event(models.Model):
 
     category=((Education,'Education'),(Fashion,'Fashion'),(Food,'Food'),(Other,'Other'), )
     types=((Fair,'Fair'),(Conference,'Conference'),(Party,'Party'),(Other,'Other'), )
-    
+
     user=models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     event_title=models.CharField(max_length=150)
     category=models.CharField(max_length=50,choices=category,default='Category')
@@ -31,6 +31,9 @@ class Create_Event(models.Model):
     end_time=models.TimeField(default='12:00')
     image=models.ImageField(upload_to='events/',blank=True,null=True)
     description=RichTextField(default=0)
+
+    def get_absolute_url(self):
+        return reverse('event_detail',kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.event_title

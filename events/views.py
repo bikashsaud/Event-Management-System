@@ -19,42 +19,74 @@ from Account.models import UserProfile
 from .forms import CreateForm,SignupForm,GetTokenForm
 from create_event.models import Create_Event
 from get_token.models import Get_Token
-#
+
+from django.views.generic import TemplateView
+from django.views import View
 # Create your views here
 
-def create(request):
-    if request.user.is_authenticated():
+# class based view imports.
+from django.utils.decorators import method_decorator
+from django.views.generic import(
+            CreateView,
+            DetailView,
+            ListView,
+            UpdateView,
+            DeleteView
+)
+from django.core.urlresolvers import reverse_lazy
+# class view of the create events
+@method_decorator(login_required,name='dispatch')
+class Create_Events(CreateView):
+    # if request.user.is_authenticated():
+    model=Create_Event
+    fields='__all__'
+    template_name='create_event.html'
 
-        form=CreateForm(request.POST or None,request.FILES)
-        form1=UserProfile.objects.get(id=request.user.id)
-        context={
-            'form':form,
-        }
-        if form.is_valid():
-            data=form.save(commit=False)
-            data.user_id=form1.id
-            data.save()
-            # start of mail
-            #send_mail(subject,message,from_email,to_list,fail_silently=True)
-            # example is below
 
-            send_mail('EVENT CREATED MESSAGE '
-            ,'Thank you for creating Event in our system donot forget us anothe',
-            'saudbikash514@yahoo.com',
-            ['saudbikash514@gmail.com'],
-            fail_silently=False)
-            # end of send mail
-            return redirect('index')
-        return render(request,'create_event.html',context)
-    else:
-        return redirect('login')
-def event_detail(request,id):
-    if request.user.is_authenticated():
-        form=Create_Event.objects.filter(id=id)
-        context={"form":form,}
-        return render(request,"detail.html",context)
-    else:
-        return redirect('login')
+# def create(request):
+#     if request.user.is_authenticated():
+#         form=CreateForm(request.POST or None,request.FILES)
+#         form1=UserProfile.objects.get(id=request.user.id)
+#         context={
+#             'form':form,
+#         }
+#         if form.is_valid():
+#             data=form.save(commit=False)
+#             data.user_id=form1.id
+#             data.save()
+#             # start of mail
+#             #send_mail(subject,message,from_email,to_list,fail_silently=True)
+#             # example is below
+#             # send_mail('EVENT CREATED MESSAGE '
+#             # ,'Thank you for creating Event in our system donot forget us anothe',
+#             # 'saudbikash514@yahoo.com',
+#             # ['saudbikash514@gmail.com'],
+#             # fail_silently=False)
+#             # # end of send mail
+#             return redirect('index')
+#         return render(request,'create_event.html',context)
+#     else:
+#         return redirect('login')
+#
+
+class event_detail(DetailView):
+    """docstring for event_detail.DetailView """
+    model=Create_Event
+    template_name='detail.html'
+    # context_object_name="form"
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['form']=Create_Event.objects.get(id=self.kwargs.get('pk'))
+        return context
+
+
+# def event_detail(request,pk):
+#     if request.user.is_authenticated():
+#         form=Create_Event.objects.filter(id=pk)
+#         context={"form":form,}
+#         return render(request,"detail.html",context)
+#     else:
+#         return redirect('login')
 
 # def send_email(request):
 #     subject = request.POST.get('subject', '')
@@ -70,6 +102,7 @@ def event_detail(request,id):
 #         # In reality we'd use a form class
 #         # to get proper validation errors.
 #         return HttpResponse('Make sure all fields are entered and valid.')
+
 def get_token(request,id):
     if request.user.is_authenticated():
         form=GetTokenForm(request.POST or None)
@@ -81,35 +114,42 @@ def get_token(request,id):
             profile.user_id=ins2.id
             profile.event_id=id
             profile.save()
-            send_mail('EVENT Registered MESSAGE For you','WelCome!! your Registration is successfully Accepted## Thanks for Register !!!@','saudbikash514@yahoo.com',['saudbikash514@gmail.com'],fail_silently=False)
+            # send_mail('EVENT Registered MESSAGE For you','WelCome!! your Registration is successfully Accepted## Thanks for Register !!!@','saudbikash514@yahoo.com',['saudbikash514@gmail.com'],fail_silently=False)
             return redirect('index')
         else:
             return render(request,'get_token.html',context)
     else:
         return redirect('login')
-
 #  for paticular user_id
-def dashboard(request):
-    if request.user.is_authenticated():
-        form1=UserProfile.objects.get(id=request.user.id)
-        form2=Create_Event.objects.filter(user_id=request.user.id)
-        form3=Get_Token.objects.filter(user_id=request.user.id)
-        context={"form1":form1,"form2":form2,"form3":form3,}
-        return render(request,"dashboard.html",context)
-    else:
-        return redirect('index')
+class Dashboard(DetailView):
+    template_name='dashboard.html'
+    model=UserProfile
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['user_name']=UserProfile.objects.get(id=self.kwargs.get('pk'))
+        context['event']=Create_Event.objects.filter(user_id=self.kwargs.get('pk'))
+        context['booked_event']=Get_Token.objects.filter(user_id=self.kwargs.get('pk'))
+        return context
+
 
 # Delete Event BY who create event_title
-def delete_event(request,id):
-    if request.user.is_authenticated():
-        try:
-            doct=Create_Event.objects.get(id=id)
-            doct.delete()
-            return redirect('dashboard')
-        except:
-            return redirect('index')
-    else:
-        return redirect('login')
+
+class Delete_Event(DeleteView):
+    model=Create_Events
+    success_url=reverse_lazy("dashboard")
+
+    
+
+# def delete_event(request,id):
+#     if request.user.is_authenticated():
+#         try:
+#             doct=Create_Event.objects.get(id=id)
+#             doct.delete()
+#             return redirect('dashboard')
+#         except:
+#             return redirect('index')
+#     else:
+#         return redirect('login')
 
 #cancle event br who register Event
 def cancle_event(request,id):

@@ -22,11 +22,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index,name="index"),
+    url(r'^$', views.index.as_view(),name="index"),
     url(r'^home/',include('Account.urls')),
     url(r'^events/',include('events.urls')),
-    
-
+    url(r'^mydata/',include('mydata.urls')),
 
 ]
 

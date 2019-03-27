@@ -23,7 +23,7 @@
       </li>
       {%if user.is_authenticated%}
         <li class="nav-item" style="style="padding left:0px">
-          <a class="nav-link" href="{% url 'dashboard' %}"><u>DashBoard</u></a>
+          <a class="nav-link" href="{% url 'dashboard' request.user.id%}"><u>DashBoard</u></a>
         </li>
         {%endif%}
     </ul>

@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 # from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from django.core.urlresolvers import reverse
+# from django.contrib.urls import reverse
 # from django.utils import timezone
 
 # Create your models here.
@@ -50,7 +52,8 @@ class UserProfile(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         return True
-
+    def get_absolute_url(self):
+        return reverse('login',kwargs={'pk': self.pk})
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
         return True

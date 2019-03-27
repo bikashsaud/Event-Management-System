@@ -7,14 +7,21 @@ from .import views
 from slider.models import Slider
 from create_event.models import Create_Event
 from django.core.mail import send_mail, BadHeaderError
-
-
-def index(request):
-    form=Create_Event.objects.all()
-    slide={'slider':Slider.objects.all()[:1],'form':form}
-    # start of mail
-    #send_mail(subject,message,from_email,to_list,fail_silently=True)
-    # example is below
-    # send_mail('EVENT CREATED MESSAGE ','Message For you ','saudbikash514@yahoo.com',['saudbikash514@gmail.com'],fail_silently=False)
-    # end of send mail
-    return render(request,'index.html',slide)
+from django.views.generic import(
+            CreateView,
+            DetailView,
+            ListView,
+            UpdateView,
+            DeleteView
+)
+class index(ListView):
+    template_name='index.html'
+    model=Create_Event
+    context_object_name='form'
+    def get_queryset(self):
+        form1=Create_Event.objects.all()
+        return form1
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['slider']=Slider.objects.all()[:1]
+        return context

@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'create_event',
     'get_token',
+    'events',
+    'mydata',
 ]
 
 AUTH_USER_MODEL='Account.UserProfile'
@@ -71,7 +73,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
 ]

@@ -10,8 +10,8 @@ from get_token.models import Get_Token
 class CreateForm(forms.ModelForm):
     class Meta:
         model=Create_Event
-        exclude=['user']
-        # fields='__all__'
+        # exclude=['user']
+        fields='__all__'
 class GetTokenForm(forms.ModelForm):
     class Meta:
         model=Get_Token
